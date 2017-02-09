@@ -1,36 +1,74 @@
+{% set xorg_name = "libxcb" %}
+{% set xorg_category = "xcb" %}
+{% set name = "libxcb" %}
 {% set version = "1.12" %}
-{% set md5 = "28e552bd78bc1050b6b26ca1db0e5bb6" %}
+{% set sha256 = "4adfb1b7c67e99bc9c2ccb110b2f175686576d2f792c8a71b9c8b19014057b5b" %}
+{% set am_version = "1.15" %} # keep synchronized with build.sh
 
 package:
-  name: libxcb
+  name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  fn:  libxcb-{{ version }}.tar.bz2
-  url: http://xcb.freedesktop.org/dist/libxcb-{{ version }}.tar.bz2
-  md5: {{ md5 }}
+  fn: {{ xorg_name }}-{{ version }}.tar.bz2
+  url: https://www.x.org/releases/individual/{{ xorg_category }}/{{ xorg_name }}-{{ version }}.tar.bz2
+  sha256: {{ sha256 }}
+  patches:
+    - python3.patch
+    - windows.patch  # [win]
+
+# NOTE: Python isn't a runtime dependency, but we need to matrix across Python
+# versions to cover the different Visual Studio versions.
 
 build:
-  skip: true  # [win or osx or py3k]
-  number: 0
+  number: 1
+  detect_binary_files_with_prefix: true
+  features:
+    - vc9  # [win and py27]
+    - vc10  # [win and py34]
+    - vc14  # [win and py>=35]
 
 requirements:
   build:
+    - m2-autoconf  # [win]
+    - m2-automake{{ am_version }}  # [win]
+    - m2-libtool  # [win]
+    - m2w64-pkg-config  # [win]
+    - m2w64-toolchain  # [win]
+    - pkg-config  # [not win]
+    - posix  # [win]
     - python
+    - toolchain
+    - vc 9  # [win and py27]
+    - vc 10  # [win and py34]
+    - vc 14  # [win and py>=35]
     - pthread-stubs
+    - xorg-libxau
+    - xorg-libxdmcp
+    - xorg-util-macros
     - xcb-proto
+    - xorg-xproto
+  run:
+    - vc 9  # [win and py27]
+    - vc 10  # [win and py34]
+    - vc 14  # [win and py>=35]
+    - xorg-libxau
+    - xorg-libxdmcp
 
 test:
   commands:
-    - test -f $PREFIX/lib/libxcb.so.1.1.0
+    - conda inspect linkages -p $PREFIX $PKG_NAME  # [not win]
+    - conda inspect objects -p $PREFIX $PKG_NAME  # [osx]
 
 about:
-    home: http://xcb.freedesktop.org/
-    license: MIT
-    license_file: COPYING
-    summary: "This is the C-language Binding (XCB) package to the X Window System protocol"
+  home: http://xcb.freedesktop.org/
+  license: MIT
+  license_family: MIT
+  license_file: COPYING
+  summary: "This is the C-language Binding (XCB) package to the X Window System protocol"
 
 extra:
   recipe-maintainers:
     - ccordoba12
     - mingwandroid
+    - pkgw
