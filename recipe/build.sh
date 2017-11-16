@@ -80,3 +80,31 @@ if [ -z "VS_MAJOR" ] ; then
         rm -f $uprefix/lib/lib${lib_ident}.la $uprefix/lib/lib${lib_ident}.a
     done
 fi
+
+if [ "$(uname)" == "Linux" ]; then
+    # Build a dummy libxcb-xlib. This library used to exist, but was
+    # deprecated.
+    # The problem is that on older systems where it still exists
+    # (e.g SUSE 11), we may end up mixing the system's libxcb-xlib with the
+    # libX11 and libxcb provided by conda.
+    # This can cause missing symbols when trying to run a binary which links
+    # to libxcb:
+    #
+    #    /usr/lib64/libxcb-xlib.so.0: undefined symbol: _xcb_unlock_io
+    #
+    # In this case _xcb_unlock_io is present on /usr/lib64/libxcb.so.1, but
+    # there is no such function anymore on the version we built here.
+    # Packaging a dummy library solves libxcb-xlib this problem as the only
+    # libxcb-xlib user is libX11:
+    #
+    # https://lists.freedesktop.org/archives/xcb/2009-April/004489.html
+    # https://lists.freedesktop.org/archives/xcb/2009-April/004492.html
+    #
+    # PLEASE NOTE that if you are facing this problem you also need to install
+    # conda-forge's libx11, otherwise you will get something like:
+    #
+    #   /usr/lib64/libX11.so.6: undefined symbol: xcb_xlib_lock
+    cd "$PREFIX/lib"
+    echo ' ' | $CC --shared -Wl,-soname,libxcb-xlib.so.0 -o libxcb-xlib.so.0.0.0 
+    ln -s libxcb-xlib.so.0.0.0 libxcb-xlib.so.0
+fi
