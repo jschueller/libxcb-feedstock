@@ -23,10 +23,6 @@ source:
 build:
   number: 0
   detect_binary_files_with_prefix: true
-  features:
-    - vc9  # [win and py27]
-    - vc10  # [win and py34]
-    - vc14  # [win and py>=35]
 
 requirements:
   build:
@@ -37,11 +33,7 @@ requirements:
     - m2w64-toolchain  # [win]
     - pkg-config  # [not win]
     - posix  # [win]
-    - python
     - toolchain
-    - vc 9  # [win and py27]
-    - vc 10  # [win and py34]
-    - vc 14  # [win and py>=35]
     - pthread-stubs
     - xorg-libxau
     - xorg-libxdmcp
@@ -49,9 +41,6 @@ requirements:
     - xcb-proto
     - xorg-xproto
   run:
-    - vc 9  # [win and py27]
-    - vc 10  # [win and py34]
-    - vc 14  # [win and py>=35]
     - xorg-libxau
     - xorg-libxdmcp
 
