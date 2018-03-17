@@ -37,7 +37,7 @@ requirements:
     - xorg-libxau
     - xorg-libxdmcp
     - xorg-util-macros
-    - xcb-proto
+    - xcb-proto >=1.13
     - xorg-xproto
   run:
     - xorg-libxau
