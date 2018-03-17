@@ -14,7 +14,6 @@ source:
   url: https://www.x.org/releases/individual/{{ xorg_category }}/{{ xorg_name }}-{{ version }}.tar.bz2
   sha256: {{ sha256 }}
   patches:
-    - python3.patch
     - windows.patch  # [win]
 
 # NOTE: Python isn't a runtime dependency, but we need to matrix across Python
