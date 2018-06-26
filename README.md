@@ -14,14 +14,16 @@ Summary: This is the C-language Binding (XCB) package to the X Window System pro
 Current build status
 ====================
 
-Linux: [![Circle CI](https://circleci.com/gh/conda-forge/libxcb-feedstock.svg?style=shield)](https://circleci.com/gh/conda-forge/libxcb-feedstock)
-OSX: [![TravisCI](https://travis-ci.org/conda-forge/libxcb-feedstock.svg?branch=master)](https://travis-ci.org/conda-forge/libxcb-feedstock)
-Windows: [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/conda-forge/libxcb-feedstock?svg=True)](https://ci.appveyor.com/project/conda-forge/libxcb-feedstock/branch/master)
+[![Linux](https://img.shields.io/circleci/project/github/conda-forge/libxcb-feedstock/master.svg?label=Linux)](https://circleci.com/gh/conda-forge/libxcb-feedstock)
+[![OSX](https://img.shields.io/travis/conda-forge/libxcb-feedstock/master.svg?label=macOS)](https://travis-ci.org/conda-forge/libxcb-feedstock)
+[![Windows](https://img.shields.io/appveyor/ci/conda-forge/libxcb-feedstock/master.svg?label=Windows)](https://ci.appveyor.com/project/conda-forge/libxcb-feedstock/branch/master)
 
 Current release info
 ====================
-Version: [![Anaconda-Server Badge](https://anaconda.org/conda-forge/libxcb/badges/version.svg)](https://anaconda.org/conda-forge/libxcb)
-Downloads: [![Anaconda-Server Badge](https://anaconda.org/conda-forge/libxcb/badges/downloads.svg)](https://anaconda.org/conda-forge/libxcb)
+
+| Name | Downloads | Version | Platforms |
+| --- | --- | --- | --- |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libxcb-green.svg)](https://anaconda.org/conda-forge/libxcb) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libxcb.svg)](https://anaconda.org/conda-forge/libxcb) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libxcb.svg)](https://anaconda.org/conda-forge/libxcb) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libxcb.svg)](https://anaconda.org/conda-forge/libxcb) |
 
 Installing libxcb
 =================
