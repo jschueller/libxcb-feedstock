@@ -17,7 +17,7 @@ source:
     - windows.patch  # [win]
 
 build:
-  number: 0
+  number: 1
   detect_binary_files_with_prefix: true
 
 requirements:
@@ -38,6 +38,7 @@ requirements:
     - xcb-proto >=1.13
     - xorg-xproto
   run:
+    - pthread-stubs
     - xorg-libxau
     - xorg-libxdmcp
 
