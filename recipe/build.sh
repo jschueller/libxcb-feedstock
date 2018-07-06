@@ -32,6 +32,11 @@ if [ -n "$CYGWIN_PREFIX" ] ; then
         -I "$BUILD_PREFIX_M/Library/mingw-w64/share/aclocal"
     )
     autoreconf "${autoreconf_args[@]}"
+
+    # And we need to add the search path that lets libtool find the
+    # msys2 stub libraries for ws2_32.
+    platlibs=$(cd $(dirname $(gcc --print-prog-name=ld))/../lib && pwd -W)
+    export LDFLAGS="$LDFLAGS -L$platlibs"
 fi
 
 export PKG_CONFIG_LIBDIR=$uprefix/lib/pkgconfig:$uprefix/share/pkgconfig
@@ -75,7 +80,7 @@ xcb-xvmc
 "
 
 # Non-Windows: prefer dynamic libraries to static, and dump libtool helper files
-if [ -z "VS_MAJOR" ] ; then
+if [ -z "$CYGWIN_PREFIX" ] ; then
     for lib_ident in $xcb_libs ; do
         rm -f $uprefix/lib/lib${lib_ident}.la $uprefix/lib/lib${lib_ident}.a
     done

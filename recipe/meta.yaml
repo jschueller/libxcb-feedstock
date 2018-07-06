@@ -44,6 +44,38 @@ requirements:
 
 test:
   commands:
+    {% set lib_idents = [
+      "xcb",
+      "xcb-composite",
+      "xcb-damage",
+      "xcb-dpms",
+      "xcb-dri2",
+      "xcb-glx",
+      "xcb-present",
+      "xcb-randr",
+      "xcb-record",
+      "xcb-res",
+      "xcb-screensaver",
+      "xcb-shape",
+      "xcb-shm",
+      "xcb-sync",
+      "xcb-xf86dri",
+      "xcb-xfixes",
+      "xcb-xinerama",
+      "xcb-xkb",
+      "xcb-xtest",
+      "xcb-xv",
+      "xcb-xvmc",
+    ] %}
+    {% set lib_idents = lib_idents + ['xcb-dri3'] %}  # [not win]
+    {% for lib_ident in lib_idents %}
+    - test -f $PREFIX/lib/lib{{ lib_ident }}.dylib  # [osx]
+    - test -f $PREFIX/lib/lib{{ lib_ident }}.so  # [linux]
+    - if not exist %PREFIX%/Library/lib/lib{{ lib_ident }}.dll.a exit /b 1  # [win]
+    - if not exist %PREFIX%/Library/lib/lib{{ lib_ident }}.a exit /b 1  # [win]
+    - if not exist %PREFIX%/Library/lib/lib{{ lib_ident }}.la exit /b 1  # [win]
+    - if not exist %PREFIX%/Library/bin/msys-{{ lib_ident }}-*.dll exit /b 1  # [win]
+    {% endfor %}
     - conda inspect linkages -p $PREFIX $PKG_NAME  # [not win]
     - conda inspect objects -p $PREFIX $PKG_NAME  # [osx]
 
