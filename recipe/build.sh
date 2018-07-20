@@ -20,6 +20,11 @@ else
     uprefix="$PREFIX"
 fi
 
+# Cf. https://github.com/conda-forge/staged-recipes/issues/673, we're in the
+# process of excising Libtool files from our packages. Existing ones can break
+# the build while this happens.
+find $PREFIX -name '*.la' -delete
+
 # On Windows we need to regenerate the configure scripts.
 if [ -n "$CYGWIN_PREFIX" ] ; then
     am_version=1.15 # keep sync'ed with meta.yaml
@@ -65,6 +70,7 @@ xcb-glx
 xcb-present
 xcb-randr
 xcb-record
+xcb-render
 xcb-res
 xcb-screensaver
 xcb-shape
@@ -73,18 +79,23 @@ xcb-sync
 xcb-xf86dri
 xcb-xfixes
 xcb-xinerama
+xcb-xinput
 xcb-xkb
 xcb-xtest
 xcb-xv
 xcb-xvmc
 "
 
-# Non-Windows: prefer dynamic libraries to static, and dump libtool helper files
+# Non-Windows: prefer dynamic libraries to static
 if [ -z "$CYGWIN_PREFIX" ] ; then
     for lib_ident in $xcb_libs ; do
-        rm -f $uprefix/lib/lib${lib_ident}.la $uprefix/lib/lib${lib_ident}.a
+        rm -f $uprefix/lib/lib${lib_ident}.a
     done
 fi
+
+# Remove any new Libtool files we may have installed. It is intended that
+# conda-build will eventually do this automatically.
+find $PREFIX -name '*.la' -delete
 
 if [ "$(uname)" == "Linux" ]; then
     # Build a dummy libxcb-xlib. This library used to exist, but was
@@ -110,6 +121,6 @@ if [ "$(uname)" == "Linux" ]; then
     #
     #   /usr/lib64/libX11.so.6: undefined symbol: xcb_xlib_lock
     cd "$PREFIX/lib"
-    echo ' ' | $CC --shared -Wl,-soname,libxcb-xlib.so.0 -o libxcb-xlib.so.0.0.0 
+    echo ' ' | $CC --shared -Wl,-soname,libxcb-xlib.so.0 -o libxcb-xlib.so.0.0.0
     ln -s libxcb-xlib.so.0.0.0 libxcb-xlib.so.0
 fi
