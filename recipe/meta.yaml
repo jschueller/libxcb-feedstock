@@ -17,7 +17,7 @@ source:
     - windows.patch  # [win]
 
 build:
-  number: 1002
+  number: 1003
   detect_binary_files_with_prefix: true
 
 requirements:
@@ -28,6 +28,7 @@ requirements:
     - m2w64-pkg-config              # [win]
     - pkg-config                    # [not win]
     - posix                         # [win]
+    - gnuconfig  # [unix]
     - {{ compiler('c') }}           # [unix]
     - {{ compiler('m2w64_c') }}     # [win]
     - make                          # [unix]
@@ -35,6 +36,7 @@ requirements:
     - automake                      # [unix]
     - gettext                       # [unix]
     - libtool                       # [unix]
+    - python  # [build_platform != target_platform]
   host:
     - pthread-stubs
     - xorg-libxau
@@ -79,8 +81,6 @@ test:
     - if not exist %PREFIX%/Library/lib/lib{{ lib_ident }}.dll.a exit /b 1  # [win]
     - if not exist %PREFIX%/Library/bin/msys-{{ lib_ident }}-*.dll exit /b 1  # [win]
     {% endfor %}
-    - conda inspect linkages -p $PREFIX $PKG_NAME  # [not win]
-    - conda inspect objects -p $PREFIX $PKG_NAME  # [osx]
 
 about:
   home: http://xcb.freedesktop.org/
